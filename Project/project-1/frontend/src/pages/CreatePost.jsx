@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 const CreatePost = () => {
 
   const navigate=useNavigate()
+  
   async function handelSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const res = await axios.post("http://localhost:3000/create-post", formData);
+    const res = await axios.post("http://localhost:3000/api/post/create-post", formData);
     navigate("/allpost")
   }
   return (

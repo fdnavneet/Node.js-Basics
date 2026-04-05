@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 async function connectDb(){
-  await mongoose.connect("mongodb+srv://ytbackend:isBiRsqryEBYLzBR@backend.y3i9n9r.mongodb.net/image-gallery")
+  await mongoose.connect(process.env.MONGO_URI)
   console.log("db is connected ")
 }
 

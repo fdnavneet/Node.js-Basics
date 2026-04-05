@@ -6,12 +6,12 @@ const Feed = () => {
   const [post, setPost] = useState([]);
 
   async function fetchData() {
-    const res = await axios.get("http://localhost:3000/getAll-post");
+    const res = await axios.get("http://localhost:3000/api/post/getAll-post");
     setPost(res.data.post);
   }
 
   async function handleDelete(id) {
-    await axios.delete(`http://localhost:3000/Delete-post/${id}`);
+    await axios.delete(`http://localhost:3000/api/post/delete-post/${id}`);
     setPost((prev) => prev.filter((i) => i._id !== id));
   }
 
