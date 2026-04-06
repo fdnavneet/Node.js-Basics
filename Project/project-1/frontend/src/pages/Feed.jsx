@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EmptyPost from "./EmptyPost";
+import LogOut from "./LogOut";
 
 const Feed = () => {
   const [post, setPost] = useState([]);
@@ -20,6 +21,7 @@ const Feed = () => {
   }, []);
   return (
     <div className="bg-gray-100 min-h-screen py-10">
+      <LogOut className="bg-gray-100" />
       <h1 className="text-3xl font-bold text-center mb-8">All Posts</h1>
 
       {post.length === 0 ? (

@@ -31,9 +31,13 @@ async function signUp(req,res){
     id:user._id
   },process.env.JWT_SECRET)
 
-  res.cookie("token",token)
+  res.cookie("token",token,{
+    httpOnly:true,
+    sameSite:"lax",
+    secure:false,
+  })
   res.status(200).json({
-    msg:"user created",
+    message:"user created",
     user:{
       id:user._id,
       user:user.userName,
@@ -55,24 +59,28 @@ async function logIn(req,res){
 
   if(!user){
     return res.status(401).json({
-      msg:"invalid userName and email"
+      message:"invalid userName and email"
     })
   }
 
  const isValidpassowrd= await bcrypt.compare(password,user.password)
  if(!isValidpassowrd){
   return res.status(401).json({
-    msg:"invalid password"
+    message:"invalid password"
   })
  }
  
  const token = jwt.sign({
   id:user._id
  },process.env.JWT_SECRET)
- res.cookie("token",token)
+ res.cookie("token",token,{
+  httpOnly:true,
+  sameSite:"lax",
+  secure:false
+ })
 
  res.status(200).json({
-  msg:"user log in sucessfully",
+  message:"user log in sucessfully",
   user:{
     id:user._id,
     user:user.userName,
@@ -82,4 +90,29 @@ async function logIn(req,res){
  })
 
 }
-export {signUp,logIn}
+
+function logOut(req,res){
+  res.clearCookie("token",{
+    httpOnly:true,
+    sameSite:"lax",
+    secure:false
+  })
+  res.status(200).json({
+    message: "Logout successful"
+  })
+}
+
+function protectedRoutes(req,res){
+  let token =req.cookies.token
+  if(!token){
+    return res.status(401).json({
+      message:"not loogedIn"
+    })
+  }
+  let verify=jwt.verify(token,process.env.JWT_SECRET)
+  res.status(201).json({
+    message:"user loogedIn",
+    user:verify
+  })
+}
+export {signUp,logIn,logOut,protectedRoutes}
