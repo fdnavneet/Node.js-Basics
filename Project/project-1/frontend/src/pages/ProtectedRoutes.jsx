@@ -1,28 +1,15 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useContext } from "react";
+import { Authcontext } from "../context/Authcontext";
+import {Navigate} from "react-router-dom"
 
-const ProtectedRoutes = ({children}) => {
-  const [loading, setLoading] = useState(true)
-  const navigate=useNavigate()
-  useEffect(() =>{
-    async function chechUser(){
-      try {
-        await axios.get("http://localhost:3000/api/auth/protectedRoutes",
-          {withCredentials:true}
-        )
-        setLoading(false)
-      } catch {
-        setLoading(false)
-        navigate("/")
-      }
-    }
-   chechUser()
 
-    
-  },[navigate])
-  if(loading) return <p>Loading.......</p>
+function protectedRoute({children}){
+  const {user,loading} = useContext(Authcontext)
+
+  if(loading) return <div>Loading....</div>
+  if(!user){
+    return <Navigate to='/' />
+  }
   return children
 }
-
-export default ProtectedRoutes
+export default protectedRoute

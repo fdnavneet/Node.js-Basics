@@ -1,20 +1,43 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LogOut from "./LogOut";
+import { useState } from "react";
+import FullScreenLoader from "./FullScreenLoader";
 
 const CreatePost = () => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false)
+  const [loadingText, setLoadingText] = useState("")
+  const [message, setMessage] = useState('')
+
   async function handelSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const res = await axios.post(
+    setLoading(true)
+    setLoadingText("Creating your post.....")
+    setMessage("")
+
+    try {
+      const formData = new FormData(e.target);
+      const res = await axios.post(
       "http://localhost:3000/api/post/create-post",
       formData,
+        { withCredentials: true }
     );
-    navigate("/allpost");
+    setLoadingText("Post created successfully")
+    setTimeout(() => {
+      setLoading(false)
+      navigate("/allpost");
+    }, 1500);
+    } catch (error) {
+      setLoading(false)
+      setMessage(error.response?.data?.message || "Something went wrong")
+    }
+    
   }
   return (
+    <>
+    {loading && <FullScreenLoader text={loadingText}/>}
     <section className="min-h-screen flex items-center justify-center bg-gray-900 relative">
       <div className="absolute top-4 right-4 bg-amber-100">
         <LogOut />
@@ -44,13 +67,26 @@ const CreatePost = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
           >
-            Submit
+            {loading ? "Posting..." : "Submit"}
           </button>
+
+          <p
+              className={`text-center text-sm ${
+                message.toLowerCase().includes("success") ||
+                message.toLowerCase().includes("created")
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {message}
+            </p>
         </form>
       </div>
     </section>
+    </>
   );
 };
 

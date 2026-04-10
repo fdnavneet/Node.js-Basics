@@ -9,8 +9,8 @@ async function creatPostModel(req,res){
     image:result.url,
     description:req.body.description
   })
-  return res.status(200).json({
-    msg:"post created ",
+  return res.status(201).json({
+    message:"Post created successfully",
     post
   })
 }
@@ -18,7 +18,7 @@ async function creatPostModel(req,res){
 async function getAllPost(req,res){
   const post= await postModel.find()
   res.status(200).json({
-    msg:"post featched",
+    message:"post featched",
     post
   })
 }
@@ -29,7 +29,7 @@ async function deletePost(req,res){
     _id:id
   })
   res.status(200).json({
-    msg:"post delated successfully"
+    message:"post delated successfully"
   })
 }
 

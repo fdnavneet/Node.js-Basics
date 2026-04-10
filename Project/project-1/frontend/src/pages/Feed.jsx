@@ -7,7 +7,10 @@ const Feed = () => {
   const [post, setPost] = useState([]);
 
   async function fetchData() {
-    const res = await axios.get("http://localhost:3000/api/post/getAll-post");
+    const res = await axios.get("http://localhost:3000/api/post/getAll-post",{
+      withCredentials:true
+    });
+
     setPost(res.data.post);
   }
 

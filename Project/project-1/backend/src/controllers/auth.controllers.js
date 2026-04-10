@@ -36,8 +36,8 @@ async function signUp(req,res){
     sameSite:"lax",
     secure:false,
   })
-  res.status(200).json({
-    message:"user created",
+  res.status(201).json({
+    message:"Account created successfully",
     user:{
       id:user._id,
       user:user.userName,
@@ -103,16 +103,7 @@ function logOut(req,res){
 }
 
 function protectedRoutes(req,res){
-  let token =req.cookies.token
-  if(!token){
-    return res.status(401).json({
-      message:"not loogedIn"
-    })
-  }
-  let verify=jwt.verify(token,process.env.JWT_SECRET)
-  res.status(201).json({
-    message:"user loogedIn",
-    user:verify
-  })
+  
+  res.json({user:req.user})
 }
 export {signUp,logIn,logOut,protectedRoutes}
