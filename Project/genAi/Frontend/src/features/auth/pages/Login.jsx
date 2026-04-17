@@ -1,10 +1,28 @@
-
-import { Link } from "react-router";
-
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
 const Login = () => {
-  function handelSubmit(e) {
+  const navigate=useNavigate()
+  const{loading,handelLogin} =useAuth()
+   
+  const [form, setform] = useState({
+    userName:"",
+    password:""
+  })
+  function handelChange(e){
+    setform({...form,[e.target.name] : e.target.value})
+  }
+  async function handelSubmit(e) {
     e.preventDefault();
-    console.log("hi login ho rha hai ");
+    await handelLogin({
+      userName:form.userName,
+      password:form.password
+    })
+    navigate('/')
+  }
+
+  if (loading){
+    return (<main><h1>loading.........</h1></main>)
   }
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200">
@@ -26,6 +44,8 @@ const Login = () => {
             </span>
 
             <input
+              name="userName"
+              onChange={handelChange}
               type="text"
               className="peer w-full pl-10 pr-4 pt-5 pb-2 rounded-xl bg-gray-50 border border-gray-300 
               focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"
@@ -47,6 +67,8 @@ const Login = () => {
             </span>
 
             <input
+            name="password"
+              onChange={handelChange}
               type="password"
               className="peer w-full pl-10 pr-4 pt-5 pb-2 rounded-xl bg-gray-50 border border-gray-300 
               focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"

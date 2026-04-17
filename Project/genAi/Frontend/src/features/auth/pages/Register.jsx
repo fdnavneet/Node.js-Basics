@@ -1,10 +1,32 @@
-import React from "react";
-import { Link } from "react-router";
-
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 const Register = () => {
-  function handelSubmit(e) {
+  const navigate=useNavigate()
+  const {handelRegister,loading}= useAuth()
+  const [form, setForm] = useState({
+    userName:"",
+    email:"",
+    password:""
+  })
+
+  function handelOnchange(e){
+    setForm({...form,[e.target.name]:e.target.value})
+  }
+  async function handelSubmit(e) {
     e.preventDefault();
-    console.log("creat");
+    await handelRegister({
+      userName:form.userName,
+      email:form.email,
+      password:form.password
+    })
+    navigate('/')
+  }
+
+  if(loading){
+    return (
+      <h1>Loading..............</h1>
+    )
   }
 
   return (
@@ -27,6 +49,8 @@ const Register = () => {
             </span>
 
             <input
+              name="userName"
+              onChange={handelOnchange}
               type="text"
               className="peer w-full pl-10 pr-4 pt-5 pb-2 rounded-xl bg-gray-50 border border-gray-300 
               focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"
@@ -48,6 +72,8 @@ const Register = () => {
             </span>
 
             <input
+              name="email"
+              onChange={handelOnchange}
               type="email"
               className="peer w-full pl-10 pr-4 pt-5 pb-2 rounded-xl bg-gray-50 border border-gray-300 
               focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"
@@ -69,6 +95,8 @@ const Register = () => {
             </span>
 
             <input
+              name="password"
+              onChange={handelOnchange}
               type="password"
               className="peer w-full pl-10 pr-4 pt-5 pb-2 rounded-xl bg-gray-50 border border-gray-300 
               focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"

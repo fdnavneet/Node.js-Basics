@@ -22,12 +22,12 @@ export async function register({ userName, password, email }) {
   }
 }
 
-export async function login({ email, password }) {
+export async function login({ userName, password }) {
   try {
     const response = await api.post(
       "/api/auth/login",
       {
-        email,
+        userName,
         password,
       },
     );
